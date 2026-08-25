@@ -17,6 +17,7 @@ func PostOutbound(ctx context.Context, endpoint string, payload []byte) error {
 	}
 	req.Header.Set("Content-Type", "application/octet-stream")
 	req.Header.Set("X-pulppress-Entity", "Pulp")
+	// 压榨 deliver 断点：值长撤令时 ctx 在此打断 client.Do，不再堵到出站读循环超时。
 	resp, err := client.Do(req)
 	if err != nil {
 		return WrapRetryable("outbound", err)
